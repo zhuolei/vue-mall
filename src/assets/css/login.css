@@ -174,9 +174,20 @@ a {
   font-size: 18px;
   text-align: center;
 }
+.md-content .btn-signup{
+  display: block;
+  height: 38px;
+  line-height: 38px;
+  border: 2px solid #34495e;
+  border-radius: 3px;
+  background: #34495e;
+  color: #fff;
+  font-size: 18px;
+  text-align: center;
+}
 .btn-login:hover {
-  background: mediumseagreen;
-  border: 2px solid mediumseagreen;
+  background: #34495e;
+  border: 2px solid #34495e;
 }
 .error-wrap .error{
   font-size: 12px;

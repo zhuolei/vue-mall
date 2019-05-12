@@ -32,8 +32,9 @@
         <div class="navbar-menu-container">
           <!--<a href="/" class="navbar-link"></a>-->
           <span class="navbar-link"></span>
-          <a href="javascript:void(0)" class="navbar-link" @click="loginModalFlag=true">Login</a>
-          <a href="javascript:void(0)" class="navbar-link">Logout</a>
+          <a href="javascript:;" class="navbar-link" @click="loginModalFlag=true">Login</a>
+          <div class="navbar-link signup"><a href="javascript:;" @click="signupModalFlag=true">Signup</a></div>
+          <!--<a href="javascript:;" class="navbar-link">Logout</a>-->
           <div class="navbar-cart-container">
             <span class="navbar-cart-count"></span>
             <a class="navbar-link navbar-cart-link" href="/#/cart">
@@ -74,8 +75,54 @@
       </div>
     </div>
     <!--<div class="md-overlay" ></div>-->
+    <div class="md-modal modal-msg md-modal-transition" v-bind:class="{'md-show':signupModalFlag}">
+      <div class="md-modal-inner">
+        <div class="md-top">
+          <div class="md-title">Signup</div>
+          <button class="md-close" @click="signupModalFlag=false">Close</button>
+        </div>
+        <div class="md-content">
+          <div class="confirm-tips">
+            <div class="error-wrap">
+              <span class="error error-show" v-show="errorTip">username already exists</span>
+            </div>
+            <ul>
+              <li class="regi_form_input">
+                <i class="icon IconPeople"></i>
+                <input type="text" tabindex="1" name="signupname" v-model="userName" class="regi_login_input regi_login_input_left" placeholder="User Name" data-type="loginname">
+              </li>
+              <li class="regi_form_input noMargin">
+                <i class="icon IconPwd"></i>
+                <input type="password" tabindex="2"  name="password" v-model="userPwd" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="Password" @keyup.enter="login">
+              </li>
+            </ul>
+          </div>
+          <div class="login-wrap">
+            <a href="javascript:;" class="btn-signup" @click="signup">Sign up</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </header>
 </template>
+<style>
+  .signup{
+    width: 80px;
+    height: 35px;
+    background-color: #34495e;
+    padding-left:auto;
+    padding-right:auto;
+    border-radius: 10px;
+    margin-left: 8px;
+  }
+  .signup a{
+    display:inline-block;
+    margin-top:8px;
+    vertical-align: center;
+    color: white;
+
+  }
+</style>
 <script>
   import './../assets/css/login.css';
   import axios from 'axios';
@@ -83,6 +130,7 @@
     data() {
       return {
         loginModalFlag: false,
+        signupModalFlag:false,
         userName: '',
         userPwd: '',
         errorTip: false,
@@ -95,11 +143,29 @@
           userPwd: this.userPwd
         }).then((response) => {
           let res = response.data.result;
-          if (response.status === '200') {
+          if (response.status == '200') {
             this.errorTip = false;
           } else {
             this.errorTip = true;
           }
+        })
+      },
+      signup() {
+        axios.post('/user/signup', {
+          userName: this.userName,
+          userPwd: this.userPwd
+        }).then((response) => {
+          let res = response.data.result;
+          console.log(response)
+          if (response.status == '201') {
+            this.errorTip = false;
+            this.signupModalFlag = false
+          } else {
+            this.errorTip = true;
+            console.log('user has been created')
+          }
+        }).catch(err => {
+          this.errorTip = true;
         })
       }
     }

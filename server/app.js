@@ -1,11 +1,11 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var cors = require('cors');
-var mongoose = require('mongoose');
-var goods = require('./routes/goods')
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const goods = require('./routes/goods')
+const users = require('./routes/users')
 
-
-var app = express();
+const app = express();
 // serve static contents
 app.use(cors());// *
 app.use(bodyParser.json()) //if you don't have things before body
@@ -23,5 +23,6 @@ promise.then(function() {
 });
 
 app.use('/goods', goods);
+app.use('/user',users);
 
 module.exports = app;
