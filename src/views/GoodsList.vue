@@ -37,7 +37,7 @@
                       <div class="name">{{item.productName}}</div>
                       <div class="price">${{item.salePrice}}</div>
                       <div class="btn-area">
-                        <a href="javascript:;" class="btn btn--m">Add to cart</a>
+                        <a href="javascript:;" class="btn btn--m" @click="addCart(item.productId)">Add to cart</a>
                       </div>
                     </div>
                   </li>
@@ -64,7 +64,7 @@
 <script>
     import './../assets/css/base.css';
     import './../assets/css/product.css';
-    import './../assets/css/login.css';
+
     import NavHeader from '@/components/NavHeader.vue';
     import NavFooter from '@/components/NavFooter.vue';
     import NavBread from '@/components/NavBread.vue';
@@ -125,11 +125,11 @@
             axios.get("/goods", {
               params:param
             }).then((response) => {
-              let res = response.data;
+              let res = response.data.result;
               this.loading = false;
               console.log(this.loading);
               console.log(response)
-              if (response.status == '200') {
+              if (response.status == '201') {
                 if (flag) {
                   this.goodsList = [...this.goodsList,...res];
                   console.log(res.length)
@@ -148,18 +148,18 @@
             })
           },
           showFilterPop() {
-              this.filterBy = true,
-              this.overlayFlag = true
+            this.filterBy = true,
+            this.overlayFlag = true
           },
           setPriceFilter(index) {
-              this.priceChecked = index,
-              this.page = 1;
-              this.getGoodsList()
-              this.closePop();
+            this.priceChecked = index,
+            this.page = 1;
+            this.getGoodsList()
+            this.closePop();
           },
           closePop() {
-              this.filterBy = false,
-              this.overlayFlag = false
+            this.filterBy = false,
+            this.overlayFlag = false
           },
           sortGoods() {
             this.sortFlag = !this.sortFlag;
@@ -172,6 +172,17 @@
               this.page++;
               this.getGoodsList(true)
             }, 500);
+          },
+          addCart(productId) {
+            axios.post("/goods/addCart", {
+              productId: productId
+            }).then((response) => {
+              if (response.status == '200') {
+                alert('success');
+              } else {
+                alert('failure')
+              }
+            })
           }
         }
     }

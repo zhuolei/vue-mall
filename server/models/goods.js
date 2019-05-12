@@ -5,8 +5,8 @@ var productSchema = new Schema({
   "productId":{type:String},
   "productName":String,
   "salePrice":Number,
-  // "productNum":Number,
-  // "checked":String,
+  "productNum":Number,
+  "checked":String,
   "productImage":String
 }, {collection: 'products'});
 
