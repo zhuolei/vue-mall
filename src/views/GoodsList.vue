@@ -42,7 +42,7 @@
                     </div>
                   </li>
                 </ul>
-                <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+                <div class="load-more"v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
                   loading
                 </div>
               </div>
@@ -54,6 +54,13 @@
       <nav-footer></nav-footer>
     </div>
 </template>
+<style>
+  .load-more{
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+  }
+</style>
 <script>
     import './../assets/css/base.css';
     import './../assets/css/product.css';
@@ -115,12 +122,23 @@
               params:param
             }).then((response) => {
               let res = response.data;
-              if (flag) {
-                this.goodsList = [...this.goodsList,...res];
+              console.log(response.status)
+              if (response.status == '200') {
+                if (flag) {
+                  this.goodsList = [...this.goodsList,...res];
+                  console.log(res.length)
+                  if (res.length == 0) {
+                    this.busy = true;
+                  } else {
+                    this.busy = false;
+                  }
+                } else {
+                  this.goodsList = [...res];
+                  this.busy = false;
+                }
               } else {
-                this.goodsList = [...res];
+                this.goodsList = []
               }
-
             })
           },
           showFilterPop() {
@@ -145,7 +163,7 @@
             setTimeout(() => {
               this.page++;
               this.getGoodsList(true)
-            }, 500);
+            }, 1000);
           }
         }
     }
