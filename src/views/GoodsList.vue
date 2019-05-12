@@ -17,7 +17,7 @@
             <div class="filter stopPop" id="filter" v-bind:class="{'filterby-show':filterBy}">
               <dl class="filter-price">
                 <dt>Price:</dt>
-                <dd><a href="javascript:void(0)" @click="priceChecked='all'" v-bind:class="{'cur':priceChecked==='all'}">All</a></dd>
+                <dd><a href="javascript:void(0)" @click="setPriceFilter('all')" v-bind:class="{'cur':priceChecked==='all'}">All</a></dd>
                 <dd v-for="(price,index) in priceFilter" >
                   <a href="javascript:void(0)" @click="setPriceFilter(index)" v-bind:class="{'cur':priceChecked===index}" >{{price.startPrice}} - {{price.endPrice}}</a>
                 </dd>
@@ -30,7 +30,7 @@
                 <ul>
                   <li v-for="(item,index) in goodsList">
                     <div class="pic">
-                      <a href="#"><img v-bind:style="imageStyle" v-lazy="'/static/' + item.productImage" alt=""></a>
+                      <a href="#"><img v-bind:style="imageStyle" v-lazy="'/static/' + item.productImage" :key="'/static/' + item.productImage" alt=""></a>
                     </div>
                     <div class="main">
                       <!--<div class="">{{item.productImg}}</div>-->
@@ -42,8 +42,8 @@
                     </div>
                   </li>
                 </ul>
-                <div class="load-more"v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
-                  loading
+                <div class="load-more"v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="20">
+                  <img src="/static/loading-svg/loading-spinning-bubbles.svg" v-show="loading">
                 </div>
               </div>
             </div>
@@ -93,7 +93,8 @@
                 sortFlag:true,
                 page:1,
                 pageSize:8,
-                busy:false,
+                busy:true,
+                loading:true,
                 imageStyle:{
                   // width: '225px',
                   // height: '250px',
@@ -116,13 +117,18 @@
             let param = {
               page: this.page,
               pageSize: this.pageSize,
-              sort: this.sortFlag? 1 : -1
+              sort: this.sortFlag? 1 : -1,
+              priceLevel: this.priceChecked
             }
+            this.loading = true;
+            console.log(this.loading);
             axios.get("/goods", {
               params:param
             }).then((response) => {
               let res = response.data;
-              console.log(response.status)
+              this.loading = false;
+              console.log(this.loading);
+              console.log(response)
               if (response.status == '200') {
                 if (flag) {
                   this.goodsList = [...this.goodsList,...res];
@@ -147,6 +153,8 @@
           },
           setPriceFilter(index) {
               this.priceChecked = index,
+              this.page = 1;
+              this.getGoodsList()
               this.closePop();
           },
           closePop() {
@@ -163,7 +171,7 @@
             setTimeout(() => {
               this.page++;
               this.getGoodsList(true)
-            }, 1000);
+            }, 500);
           }
         }
     }
