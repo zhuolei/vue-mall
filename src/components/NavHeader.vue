@@ -138,16 +138,20 @@
     },
     methods: {
       login() {
-        axios.post('/users', {
+        axios.post('/user/login', {
           userName: this.userName,
           userPwd: this.userPwd
         }).then((response) => {
-          let res = response.data.result;
+          let res = response.data.token;
+          console.log(res)
           if (response.status == '200') {
             this.errorTip = false;
           } else {
             this.errorTip = true;
           }
+        }).catch(err => {
+          console.log(err)
+          this.errorTip = true;
         })
       },
       signup() {
