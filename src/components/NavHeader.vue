@@ -31,10 +31,10 @@
       <div class="navbar-right-container" style="display: flex;">
         <div class="navbar-menu-container">
           <!--<a href="/" class="navbar-link"></a>-->
-          <span class="navbar-link"></span>
-          <a href="javascript:;" class="navbar-link" @click="loginModalFlag=true">Login</a>
+          <span class="navbar-link">{{nickName}}</span>
+          <a href="javascript:;" class="navbar-link" @click="loginModalFlag=true" v-if="!nickName">Login</a>
+          <a href="javascript:;" class="navbar-link" v-if="nickName">Logout</a>
           <div class="navbar-link signup"><a href="javascript:;" @click="signupModalFlag=true">Signup</a></div>
-          <!--<a href="javascript:;" class="navbar-link">Logout</a>-->
           <div class="navbar-cart-container">
             <span class="navbar-cart-count"></span>
             <a class="navbar-link navbar-cart-link" href="/#/cart">
@@ -74,7 +74,7 @@
         </div>
       </div>
     </div>
-    <!--<div class="md-overlay" ></div>-->
+    <div class="md-overlay" v-if="loginModalFlag || signupModalFlag"></div>
     <div class="md-modal modal-msg md-modal-transition" v-bind:class="{'md-show':signupModalFlag}">
       <div class="md-modal-inner">
         <div class="md-top">
@@ -107,7 +107,7 @@
 </template>
 <style>
   .signup{
-    width: 80px;
+    width: 83px;
     height: 35px;
     background-color: #34495e;
     padding-left:auto;
@@ -134,10 +134,15 @@
         userName: '',
         userPwd: '',
         errorTip: false,
+        nickName:'',
       }
     },
     methods: {
       login() {
+        if (!this.userName || !this.userPwd) {
+          this.errorTip = true;
+          return
+        }
         axios.post('/user/login', {
           userName: this.userName,
           userPwd: this.userPwd
@@ -146,6 +151,11 @@
           console.log(res)
           if (response.status == '200') {
             this.errorTip = false;
+            localStorage.setItem('user',JSON.stringify(response.data.user))
+            localStorage.setItem('jwt',response.data.token);
+            this.nickName = response.data.user.userName;
+            this.$router.push({ path: '/' });
+            this.loginModalFlag = false;
           } else {
             this.errorTip = true;
           }
