@@ -24,7 +24,7 @@
       <div class="navbar-left-container">
         <a href="#">
           <!--<span class="nav-vue-logo"></span>-->
-          <img class="navbar-brand-logo" src="/static/logo.png">
+          <img class="navbar-brand-logo" src="./../assets/logo.png">
           <span class="navbar-brand">VueMall</span>
         </a>
       </div>
@@ -45,43 +45,62 @@
         </div>
       </div>
     </div>
-    <!--<div class="md-modal modal-msg md-modal-transition" v-bind:class="{'md-show':loginModalFlag}">-->
-      <!--<div class="md-modal-inner">-->
-        <!--<div class="md-top">-->
-          <!--<div class="md-title">Login in</div>-->
-          <!--<button class="md-close" @click="loginModalFlag=false">Close</button>-->
-        <!--</div>-->
-        <!--<div class="md-content">-->
-          <!--<div class="confirm-tips">-->
-            <!--<div class="error-wrap">-->
-              <!--<span class="error error-show" v-show="errorTip">用户名或者密码错误</span>-->
-            <!--</div>-->
-            <!--<ul>-->
-              <!--<li class="regi_form_input">-->
-                <!--<i class="icon IconPeople"></i>-->
-                <!--<input type="text" tabindex="1" name="loginname" v-model="userName" class="regi_login_input regi_login_input_left" placeholder="User Name" data-type="loginname">-->
-              <!--</li>-->
-              <!--<li class="regi_form_input noMargin">-->
-                <!--<i class="icon IconPwd"></i>-->
-                <!--<input type="password" tabindex="2"  name="password" v-model="userPwd" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="Password" @keyup.enter="login">-->
-              <!--</li>-->
-            <!--</ul>-->
-          <!--</div>-->
-          <!--<div class="login-wrap">-->
-            <!--<a href="javascript:;" class="btn-login" @click="login">登  录</a>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
+    <div class="md-modal modal-msg md-modal-transition" v-bind:class="{'md-show':loginModalFlag}">
+      <div class="md-modal-inner">
+        <div class="md-top">
+          <div class="md-title">Login</div>
+          <button class="md-close" @click="loginModalFlag=false">Close</button>
+        </div>
+        <div class="md-content">
+          <div class="confirm-tips">
+            <div class="error-wrap">
+              <span class="error error-show" v-show="errorTip">username or password is wrong</span>
+            </div>
+            <ul>
+              <li class="regi_form_input">
+                <i class="icon IconPeople"></i>
+                <input type="text" tabindex="1" name="loginname" v-model="userName" class="regi_login_input regi_login_input_left" placeholder="User Name" data-type="loginname">
+              </li>
+              <li class="regi_form_input noMargin">
+                <i class="icon IconPwd"></i>
+                <input type="password" tabindex="2"  name="password" v-model="userPwd" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="Password" @keyup.enter="login">
+              </li>
+            </ul>
+          </div>
+          <div class="login-wrap">
+            <a href="javascript:;" class="btn-login" @click="login">Sign in</a>
+          </div>
+        </div>
+      </div>
+    </div>
     <!--<div class="md-overlay" ></div>-->
   </header>
 </template>
 <script>
   import './../assets/css/login.css';
+  import axios from 'axios';
   export default {
     data() {
       return {
         loginModalFlag: false,
+        userName: '',
+        userPwd: '',
+        errorTip: false,
+      }
+    },
+    methods: {
+      login() {
+        axios.post('/users', {
+          userName: this.userName,
+          userPwd: this.userPwd
+        }).then((response) => {
+          let res = response.data.result;
+          if (response.status === '200') {
+            this.errorTip = false;
+          } else {
+            this.errorTip = true;
+          }
+        })
       }
     }
   }

@@ -2182,6 +2182,7 @@ html {
 
 .md-modal .md-modal-inner {
   padding: 60px 50px;
+  border-radius: 10px;
 }
 
 .md-modal .btn-wrap {
