@@ -37,7 +37,7 @@
                       <div class="name">{{item.productName}}</div>
                       <div class="price">${{item.salePrice}}</div>
                       <div class="btn-area">
-                        <a href="javascript:;" class="btn btn--m" @click="addCart(item.productId)">Add to cart</a>
+                        <a href="javascript:;" class="btn btn--m" @click="addCart(item._id)">Add to cart</a>
                       </div>
                     </div>
                   </li>
@@ -51,6 +51,26 @@
         </div>
       </div>
       <div class="md-overlay" v-show="overlayFlag" @click="closePop"></div>
+      <modal v-bind:mdShow="mdShow" v-on:close="closeModal">
+          <p slot="message">
+            you cannot add item to shopping cart without login
+          </p>
+        <div slot="btnGroup">
+          <a class="btn btn--m" @click="closeModal">close</a>
+        </div>
+      </modal>
+      <modal v-bind:mdShow="mdShowCart" v-on:close="closeModal">
+        <p slot="message">
+          <svg class="icon-status-ok">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-status-ok"></use>
+          </svg>
+          <span>Added to shopping cart!</span>
+        </p>
+        <div slot="btnGroup">
+          <a class="btn btn--m" href="javascript:;" @click="mdShowCart = false">keep shoping</a>
+          <router-link class="btn btn--m btn--red" href="javascript:;" to="/cart">view cart</router-link>
+        </div>
+      </modal>
       <nav-footer></nav-footer>
     </div>
 </template>
@@ -74,10 +94,10 @@
 <script>
     import './../assets/css/base.css';
     import './../assets/css/product.css';
-
     import NavHeader from '@/components/NavHeader.vue';
     import NavFooter from '@/components/NavFooter.vue';
     import NavBread from '@/components/NavBread.vue';
+    import Modal from '@/components/Modal.vue';
     import axios from 'axios';
     export default {
         data() {
@@ -105,6 +125,9 @@
                 pageSize:8,
                 busy:true,
                 loading:true,
+                mdShow:false,
+                userName: '',
+                mdShowCart: false,
                 imageStyle:{
                   // width: '225px',
                   // height: '250px',
@@ -117,7 +140,8 @@
         components: {
           NavHeader,
           NavFooter,
-          NavBread
+          NavBread,
+          Modal
         },
         mounted: function () {
           this.getGoodsList();
@@ -184,15 +208,23 @@
             }, 500);
           },
           addCart(productId) {
+            this.userName = JSON.parse(localStorage.getItem('user')).userName;
             axios.post("/goods/addCart", {
-              productId: productId
+              _id: productId,
+              userName: this.userName
             }).then((response) => {
               if (response.status == '200') {
-                alert('success');
+                this.mdShowCart = true;
               } else {
-                alert('failure')
+                this.mdShow = true;
               }
+            }).catch((res) => {
+              console.log(res)
+              this.mdShow = true;
             })
+          },
+          closeModal() {
+            this.mdShow = false;
           }
         }
     }

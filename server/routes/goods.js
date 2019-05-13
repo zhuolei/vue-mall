@@ -38,7 +38,6 @@ router.get("/", (req, res, next) => {
   let goodsModel = Goods.find(params).skip(skip).limit(pageSize);
   goodsModel.sort({'salePrice' : sort})
   goodsModel.find({}).then(result => {
-    console.log('result:' + result)
     if (!result) {
       res.status(404).json({
         message: "Not found!"
@@ -62,10 +61,16 @@ router.get("/", (req, res, next) => {
   // }
 });
 router.post("/addCart", async (req,res,next) => {
-  let userId = '100000077';
-  let productId = req.body.productId;
+  let userName = req.body.userName;
+  if (!userName) {
+    res.status(401).json({
+      message: "You need login!"
+    });
+  }
+  let _id = req.body._id;
+  console.log(_id)
   try {
-    let user = await User.findOne({userId: userId})
+    let user = await User.findOne({userName: userName})
     if (!user) {
       res.status(404).json({
         message: "User Not found!"
@@ -78,6 +83,7 @@ router.post("/addCart", async (req,res,next) => {
         item.productNum ++;
       }
     });
+    console.log(goodsItem)
     if (goodsItem) {
       console.log(goodsItem)
       let result = user.save()
