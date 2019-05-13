@@ -1,6 +1,6 @@
 # vuemall
 
-> Vue Mall by using vuejs,nodejs, expressjs, mongodb, jwt token
+> Vue Mall by using vuejs, vue-router, vue-lazyload, nodejs, expressjs, mongodb, jwt token
 
 ## Build Setup
 
