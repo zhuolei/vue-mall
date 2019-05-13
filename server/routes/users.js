@@ -61,6 +61,8 @@ router.post('/login', (req,res,next) => {
       message: "Auth failed"
     })
   })
-
 })
+// router.post('/logout', (req,res,next) => {
+//
+// })
 module.exports = router;

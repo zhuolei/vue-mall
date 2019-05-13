@@ -124,6 +124,5 @@ router.post("/addCart", async (req,res,next) => {
       message: "Internal Server Error!"
     });
   };
-
 })
 module.exports = router;

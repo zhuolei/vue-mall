@@ -9,7 +9,7 @@
           <div class="filter-nav">
             <span class="sortby">Sort by:</span>
             <a href="javascript:void(0)" class="default cur">Default</a>
-            <a href="javascript:void(0)" class="price" @click="sortGoods">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+            <a href="javascript:void(0)" class="price" @click="sortGoods">Price <svg class="icon icon-arrow-short" v-bind:class="{'sort-up':!sortFlag}"><use xlink:href="#icon-arrow-short"></use></svg></a>
             <a href="javascript:void(0)" class="filterby stopPop" @click="showFilterPop">Filter by</a>
           </div>
           <div class="accessory-result">
@@ -59,6 +59,16 @@
     height: 100px;
     line-height: 100px;
     text-align: center;
+  }
+  .sort-up{
+    transform:rotate(180deg);
+    transition: all .3s ease-out;
+  }
+  .btn:hover {
+    background-color: grey;
+    color: white;
+    border-color: grey;
+    transition: all .3s ease-out;
   }
 </style>
 <script>
