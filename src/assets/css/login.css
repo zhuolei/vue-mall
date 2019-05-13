@@ -71,6 +71,9 @@
   color: #666;
   text-decoration: none;
 }
+.header .a{
+  color: white;
+}
 a {
   -webkit-transition: color .3s ease-out;
   transition: color .3s ease-out;

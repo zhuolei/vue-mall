@@ -34,7 +34,7 @@
           <span class="navbar-link">{{nickName}}</span>
           <a href="javascript:;" class="navbar-link" @click="loginModalFlag=true" v-if="!nickName">Login</a>
           <a href="javascript:;" class="navbar-link" v-if="nickName" @click="logout">Logout</a>
-          <div class="navbar-link signup"><a href="javascript:;" @click="signupModalFlag=true">Signup</a></div>
+          <div class="navbar-link signup"><a href="javascript:;" @click="signupModalFlag=true" class="a">Signup</a></div>
           <div class="navbar-cart-container">
             <span class="navbar-cart-count"></span>
             <a class="navbar-link navbar-cart-link" href="/#/cart">
@@ -115,12 +115,11 @@
     border-radius: 10px;
     margin-left: 8px;
   }
-  .signup a{
+  .signup .a{
     display:inline-block;
     margin-top:8px;
     vertical-align: center;
-    color: white;
-
+    /*color: white !important;*/
   }
 </style>
 <script>

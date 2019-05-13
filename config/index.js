@@ -3,7 +3,8 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-
+const url = 'https://polar-shore-24303.herokuapp.com/';
+const local = 'http://localhost:3000'
 module.exports = {
   dev: {
 

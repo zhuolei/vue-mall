@@ -13,7 +13,10 @@ app.use(bodyParser.urlencoded({extended: false})); // parse form data
 
 // connect to monogdb
 mongoose.Promise = global.Promise;
-var promise = mongoose.connect("mongodb+srv://leo:76hHYuoBGSzS09Ed@imooc-fgpwg.mongodb.net/vue-mall?retryWrites=true", {
+var promise = mongoose.connect(
+  "mongodb+srv://leo:" +
+  process.env.MONGO_ATLAS_PW +
+  "@imooc-fgpwg.mongodb.net/vue-mall?retryWrites=true", {
   useNewUrlParser: true
 });
 promise.then(function() {
