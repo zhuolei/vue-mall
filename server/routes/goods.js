@@ -60,32 +60,34 @@ router.get("/", (req, res, next) => {
     // }
   // }
 });
+
+
 router.post("/addCart", async (req,res,next) => {
   let userName = req.body.userName;
+  console.log(userName)
   if (!userName) {
     res.status(401).json({
       message: "You need login!"
     });
   }
   let _id = req.body._id;
-  console.log(_id)
+  let user;
+  let good;
+  let goodsItem = '';
   try {
-    let user = await User.findOne({userName: userName})
+    user = await User.findOne({userName: userName})
     if (!user) {
       res.status(404).json({
         message: "User Not found!"
       });
     }
-    let goodsItem = '';
     user.cartList.forEach(item => {
-      if(item.productId == productId){
+      if(item._id == _id){
         goodsItem = item;
         item.productNum ++;
       }
     });
-    console.log(goodsItem)
     if (goodsItem) {
-      console.log(goodsItem)
       let result = user.save()
       if (!result) {
         res.status(403).json({
@@ -98,21 +100,25 @@ router.post("/addCart", async (req,res,next) => {
         })
       }
     } else {
-      let good = await Goods.findOne({productId:productId});
+      good = await Goods.findOne({_id:_id});
+      console.log("goods: " + good)
       if (!good) {
+        console.log("goods: " + good)
         res.status(404).json({
           message: "product not found!"
         });
       }
       user.cartList.push({
-        "productId":result.productId,
-        "productName":result.productName,
-        "salePrice":result.salePrice,
-        "productImage":result.productImage,
+        "_id":_id,
+        "productName":good.productName,
+        "salePrice":good.salePrice,
+        "productImage":good.productImage,
         "productNum":1,
         "checked":1
       });
+    
       let userSave = await user.save();
+      console.log(userSave)
       if (!userSave) {
         res.status(403).json({
           message: "user cart cannot update!"
@@ -122,9 +128,8 @@ router.post("/addCart", async (req,res,next) => {
           message: "User cart update!",
           result: userSave
         })
-      }
+      }  
     }
-    console.log(user)
   } catch (e) {
     res.status(500).json({
       message: "Internal Server Error!"
