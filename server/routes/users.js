@@ -32,6 +32,12 @@ router.post('/login', (req,res,next) => {
   let param = {
     userName: req.body.userName
   }
+  if (!req.body.userName) {
+    return res.status(403).json({
+      message:'please login!'
+    })
+  }
+
   let fetchedUser;
   User.findOne(param).then(user => {
     if (!user) {
