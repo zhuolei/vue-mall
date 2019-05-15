@@ -8,18 +8,18 @@
         <div class="container">
           <div class="filter-nav">
             <span class="sortby">Sort by:</span>
-            <a href="javascript:void(0)" class="default cur">Default</a>
-            <a href="javascript:void(0)" class="price" @click="sortGoods">Price <svg class="icon icon-arrow-short" v-bind:class="{'sort-up':!sortFlag}"><use xlink:href="#icon-arrow-short"></use></svg></a>
-            <a href="javascript:void(0)" class="filterby stopPop" @click="showFilterPop">Filter by</a>
+            <a href="javascript:;" class="default cur">Default</a>
+            <a href="javascript:;" class="price" @click="sortGoods">Price <svg class="icon icon-arrow-short" v-bind:class="{'sort-up':!sortFlag}"><use xlink:href="#icon-arrow-short"></use></svg></a>
+            <a href="javascript:;" class="filterby stopPop" @click="showFilterPop">Filter by</a>
           </div>
           <div class="accessory-result">
             <!-- filter -->
             <div class="filter stopPop" id="filter" v-bind:class="{'filterby-show':filterBy}">
               <dl class="filter-price">
                 <dt>Price:</dt>
-                <dd><a href="javascript:void(0)" @click="setPriceFilter('all')" v-bind:class="{'cur':priceChecked==='all'}">All</a></dd>
-                <dd v-for="(price,index) in priceFilter" >
-                  <a href="javascript:void(0)" @click="setPriceFilter(index)" v-bind:class="{'cur':priceChecked===index}" >{{price.startPrice}} - {{price.endPrice}}</a>
+                <dd><a href="javascript:;" @click="setPriceFilter('all')" v-bind:class="{'cur':priceChecked==='all'}">All</a></dd>
+                <dd v-for="(price,index) in priceFilter" :key="index">
+                  <a href="javascript:;" @click="setPriceFilter(index)" v-bind:class="{'cur':priceChecked===index}" >{{price.startPrice}} - {{price.endPrice}}</a>
                 </dd>
               </dl>
             </div>
@@ -28,7 +28,7 @@
             <div class="accessory-list-wrap">
               <div class="accessory-list col-4">
                 <ul>
-                  <li v-for="(item,index) in goodsList">
+                  <li v-for="(item,index) in goodsList" :key="index">
                     <div class="pic">
                       <a href="#"><img v-bind:style="imageStyle" v-lazy="'/static/' + item.productImage" :key="'/static/' + item.productImage" alt=""></a>
                     </div>
@@ -42,7 +42,7 @@
                     </div>
                   </li>
                 </ul>
-                <div class="load-more"v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="20">
+                <div class="load-more" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="20">
                   <img src="./../assets/loading-spinning-bubbles.svg" v-show="loading">
                 </div>
               </div>
@@ -211,8 +211,9 @@
             this.userName = JSON.parse(localStorage.getItem('user')).userName;
             axios.post("/goods/addCart", {
               _id: productId,
-              userName: this.userName
+              userName: this.userName || ''
             }).then((response) => {
+              console.log(response)
               if (response.status == '200') {
                 this.mdShowCart = true;
               } else {
@@ -225,6 +226,7 @@
           },
           closeModal() {
             this.mdShow = false;
+            this.mdShowCart = false;
           }
         }
     }
