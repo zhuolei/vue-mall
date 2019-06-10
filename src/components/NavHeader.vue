@@ -142,7 +142,7 @@
           this.errorTip = true;
           return
         }
-        axios.post('/user/login', {
+        axios.post('/users/login', {
           userName: this.userName,
           userPwd: this.userPwd
         }).then((response) => {
@@ -164,7 +164,7 @@
         })
       },
       signup() {
-        axios.post('/user/signup', {
+        axios.post('/users/signup', {
           userName: this.userName,
           userPwd: this.userPwd
         }).then((response) => {

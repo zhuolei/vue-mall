@@ -39,7 +39,7 @@ promise.then(function() {
 // })
 
 app.use('/goods', goods);
-app.use('/user',users);
+app.use('/users',users);
 
 // app.use(function(req, res, next) {
 //   let err = new Error('Not Found');

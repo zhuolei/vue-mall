@@ -178,8 +178,17 @@
           NavBread,
           Modal
         },
-        methods: {
+        mounted(){
+          this.init()
+        },
+        methods:{
+          init() {
+            axios.get('/users/cartList').then((response) => {
+              console.log(response)
+              // let res = response.data;
 
+            })
+          }
         }
     }
 </script>

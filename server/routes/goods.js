@@ -1,7 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var Goods = require('../models/goods');
-var User = require('../models/user')
+const express = require('express');
+const router = express.Router();
+const Goods = require('../models/goods');
+const User = require('../models/user');
+const checkAuth = require("../middleware/check-auth");
+
 router.get("/", (req, res, next) => {
   // res.send('hello,goods list')
   let page = parseInt(req.param('page'));
@@ -116,7 +118,7 @@ router.post("/addCart", async (req,res,next) => {
         "productNum":1,
         "checked":1
       });
-    
+
       let userSave = await user.save();
       console.log(userSave)
       if (!userSave) {
@@ -128,7 +130,7 @@ router.post("/addCart", async (req,res,next) => {
           message: "User cart update!",
           result: userSave
         })
-      }  
+      }
     }
   } catch (e) {
     res.status(500).json({
