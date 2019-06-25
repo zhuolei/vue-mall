@@ -67,6 +67,12 @@ module.exports = {
       }
     ]
   },
+  devServer: {
+		historyApiFallback: true,
+		noInfo: true,
+		host: 'localhost',
+    port: 5555,
+	},
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
     // source contains it (although only uses it if it's native).
