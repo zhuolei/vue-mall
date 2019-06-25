@@ -208,10 +208,11 @@
             }, 500);
           },
           addCart(productId) {
-            this.userName = JSON.parse(localStorage.getItem('user')).userName;
+            let user = JSON.parse(localStorage.getItem('user')) || '';
+            this.userName = user.userName ? user.userName : '';
             axios.post("/goods/addCart", {
               _id: productId,
-              userName: this.userName || ''
+              userName: this.userName,
             }).then((response) => {
               console.log(response)
               if (response.status == '200') {

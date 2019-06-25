@@ -32,6 +32,12 @@ router.post('/login', (req,res,next) => {
   let param = {
     userName: req.body.userName
   }
+  if (!req.body.userName) {
+    return res.status(403).json({
+      message:'please login!'
+    })
+  }
+
   let fetchedUser;
   User.findOne(param).then(user => {
     if (!user) {
@@ -65,4 +71,9 @@ router.post('/login', (req,res,next) => {
 // router.post('/logout', (req,res,next) => {
 //
 // })
+
+// search shopping cart for current user
+router.get("/cartList", function (req, res, next) {
+  console.log(req.userData)
+})
 module.exports = router;
